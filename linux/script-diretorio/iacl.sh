@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# SCRIPT PARA CRIAR DIRETÓRIOS COM SUAS DEVIDAS PERMISSÕES  
+# 
+
 echo "Criando diretórios..."
 
 mkdir /publico
