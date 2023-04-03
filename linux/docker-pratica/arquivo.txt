@@ -1,0 +1,13 @@
+# acessar 1- https://hub.docker.com/_/mysql
+
+# ir no AWS, pegar o IP 
+# ir no sistema de banco de dados, realizar uma conexão (MYSQL)
+# selecionar o banco ("Meubanco"), usuário, senha, porta (3306), CONECTAR.
+# criar um banco de dado:
+# CREATE_TABLE dados ( Aluno ID int, Nome varcher(50), Sobrenome varcher(50), Endereço varcher(50), Cidade varcher(50), Idade int, Host varcher(50), ;)
+# executar consulta e checar que o banco ta criado, mas sem informações dentro do container.
+# Criar uma aplicação em PHP "index.php" 
+# Mas primeiro entrar no diretório: 
+# cd /var/lib/docker/volumes/app/_data "
+# usar o "nano index.php"
+# 
