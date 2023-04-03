@@ -11,3 +11,177 @@
 # cd /var/lib/docker/volumes/app/_data "
 # usar o "nano index.php"
 # 
+#
+# código abaixo:
+
+<html>
+
+<head:
+<title>Exemplo PHP</title>
+<body>
+
+ini_set("display_errors", 1);
+header('Content-Type: text/html; charset=iso-8859-1')
+
+
+echo 'Versao atual do PHP: ' . phpversion() . '<br>';
+
+$servername = "34.201.104.100";
+$username = "root";
+$password = "Senha123";
+$database = "meubanco";
+
+// Criar conexão
+
+$link = new mysqli($servername, $username, $password, $database);
+
+/* check connection */
+if (mysqli_connect_errno()) {
+   printf("Connect failed: %s/n" , mysqli_connect_error());
+   exit();
+}
+
+$valor_rand1 = rand(1, 999);
+$valor_rand2 = strtoupper(substr(bin2hex(random_bytes(4)), 1));
+$host_name = gethostname();
+
+$query = "INSTER INTO dados (AlunoID, Nome, Sobrenome, Endereco, Cidade, Idade, Host) Values ('$valor_rand1' , '$valor_rand2 , '$host_name');
+
+
+if ($link->query($query) == TRUE) {
+  echo "New record created successfully";
+} else {
+  echo "Error: " . $link->error;
+}
+
+</body>
+
+</header>
+</html> 
+
+
+
+#############################################################
+
+
+# executar em outro container, para que não apague os arquivos do container principal!! : docker run -name web-server -dt -p 80:80 --mount type=volme,src=app.dst=/app/ webdevops/php-apache:alpine-php7
+# realizando download dentro do container
+# realize o teste no navegador acessando o IP
+# se for no banco de dados verá o ip inserido no banco de dados.
+###############################################################
+
+
+###############################################################
+
+# ESTRESSANDO O CONTAINER
+
+# abrir o loader.io no navegador
+# selecionar o dominío
+# acessar o container e passar o arquivo para lá
+# exemplo: "nano loaderio-a6d1238274248912.txt"
+# escrever o mesmo conteúdo dentro do arquivo.
+# realizar a verificação....
+# realizar o teste de clientes no container.
+# se checar o banco de dados verá todos os IPS do teste de estresse no servidor
+
+
+
+#########################################################
+
+# INICIANDO UM CLUSTER SWARM
+
+# primeiramente matar o segundo container (docker rm --force web-server)
+# docker swarm init
+# pegar o comando (TOKEN) e falar que ele faz parte do cluster
+# abrir o root na outra maquina (aws2)
+# inserir o token no home mesmo
+# acessar a terceira máquina (AWS3)
+# (realizar o processo em todas as maquinas para fazer o swarm)
+# checkar : docker node 
+# ver a maquina Leader e as máquina Workers
+# abrir a maquina (AWS1)
+#
+# /var/lib/docker/volumes/app/_data ~$ docker service create --name web-server --replicas 3 -dt -p 80:80 --mount type=volume,src=app,dst=/app/ webdevops/php-apache:alpinephp7
+# docker service ps web-server
+# verá os containers 
+
+###################################
+
+# apt-get install nfs-server na maquina aws1
+# apt-get install nfs-common  na maquina cliente aws2, aws3
+# abrir a maquina principal (AWS1)
+# abrir : nano /etc/exports 
+
+#replicar
+ /var/lib/docker/volumes/app/_data *(rw,sync,subtree_check) 
+
+#dessa forma libera para todos (sem nenhuma segurança)
+
+# exportfs -af
+# showmount -e 
+# vai aparecer o que está compartilhado
+#
+#executar na maquina 2 e 3 aws2-aws3
+mount -o v3 172.31.0.127:/var/lib/docker/volumes/app/_data/var/lib/docker/volumes/app/_data
+#
+#############################################################################
+
+########################
+##CRIAR UM PROXY #######
+########################
+########################
+
+
+# AWS1: executar nano nginx.conf
+# digitar:
+
+http { 
+
+    upstream all (
+         server 172.31.0.127:80;
+         server 172.31.0.189:80;
+         server 172.31.0.240.80;
+     }
+
+     server {
+          listen 4500;
+          location / {
+               proxy pass http://all/;
+             }
+      }
+}
+
+events { }
+
+######################
+#
+#
+#executar 
+#aws1  nano dockerfile
+
+FROM nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+#
+#
+#docker build -t proxy-app ,
+# image ls
+#
+# vera que as imagens estão no diretório
+# docker container run --name my-proxy-app -dti -p 4500:4500 proxy-app
+# executar docker container ls
+# vera que os arquivos estão localizados
+
+################################################
+
+
+
+# ESTRESSANDO O CLUSTER
+
+# abrir o loader.io
+# executar o novo host pegando o ping na aws
+# enviar o arquivo para o AWS1
+# cd /var/lib/docker/volumes/app/_data 
+# executar "nano loaderio_239823998123;qadfsadrhq.txt"
+#
+# estressar o servidor cluster =)
